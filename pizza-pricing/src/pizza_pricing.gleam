@@ -7,42 +7,18 @@ pub type Pizza {
   ExtraToppings(Pizza)
 }
 
-pub fn pizza_price(pizza: Pizza) -> Int {
+fn pizza_price_loop(pizza: Pizza, price: Int) {
   case pizza {
-    Margherita -> 7
-    Caprese -> 9
-    Formaggio -> 10
-    ExtraSauce(p) ->
-      case p {
-        Margherita -> 8
-        Caprese -> 10
-        Formaggio -> 11
-        ExtraToppings(x) ->
-          case x {
-            Margherita -> 10
-            Caprese -> 12
-            Formaggio -> 13
-            ExtraToppings(_) -> 2
-            ExtraSauce(_) -> 1
-          }
-        ExtraSauce(_) -> 1
-      }
-    ExtraToppings(p) ->
-      case p {
-        Margherita -> 9
-        Caprese -> 11
-        Formaggio -> 12
-        ExtraToppings(_) -> 4
-        ExtraSauce(x) ->
-          case x {
-            Margherita -> 10
-            Caprese -> 12
-            Formaggio -> 13
-            ExtraToppings(_) -> 2
-            ExtraSauce(_) -> 1
-          }
-      }
+    Margherita -> 7 + price
+    Caprese -> 9 + price
+    Formaggio -> 10 + price
+    ExtraSauce(p) -> pizza_price_loop(p, 1 + price)
+    ExtraToppings(p) -> pizza_price_loop(p, 2 + price)
   }
+}
+
+pub fn pizza_price(pizza: Pizza) -> Int {
+  pizza_price_loop(pizza, 0)
 }
 
 fn calculate_order_price(order: List(Pizza), acc: Int) -> Int {
