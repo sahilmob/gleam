@@ -28,8 +28,6 @@ pub fn apply_rules(
   |> result.try(rule4)
   |> fn(g) {
     case g {
-      Ok(g) if g.error == "You can't put a stone on top of another stone" -> g
-      Ok(g) if g.error == "Cannot place a stone with no liberties" -> g
       Ok(g) if g.player == White -> Game(..g, player: Black)
       Ok(g) if g.player == Black -> Game(..g, player: White)
       Ok(g) -> g
