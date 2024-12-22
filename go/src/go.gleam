@@ -1,3 +1,5 @@
+import gleam/result
+
 pub type Player {
   Black
   White
@@ -19,25 +21,13 @@ pub fn apply_rules(
   rule3: fn(Game) -> Result(Game, String),
   rule4: fn(Game) -> Result(Game, String),
 ) -> Game {
-  game
-  |> rule1
-  |> fn(r) {
-    case r {
-      Ok(g) -> g
-      Error(msg) -> Game(..game, error: msg)
-    }
-  }
-  |> rule2
-  |> rule3
-  |> fn(r) {
-    case r {
-      Ok(g) -> g
-      Error(msg) -> Game(..game, error: msg)
-    }
-  }
-  |> rule4
-  |> fn(r) {
-    case r {
+  Ok(game)
+  |> result.try(rule1)
+  |> result.map(rule2)
+  |> result.try(rule3)
+  |> result.try(rule4)
+  |> fn(g) {
+    case g {
       Ok(g) if g.error == "You can't put a stone on top of another stone" -> g
       Ok(g) if g.error == "Cannot place a stone with no liberties" -> g
       Ok(g) if g.player == White -> Game(..g, player: Black)
