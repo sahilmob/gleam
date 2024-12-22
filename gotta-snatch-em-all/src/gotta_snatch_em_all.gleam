@@ -22,20 +22,10 @@ pub fn trade_card(
     my_card != their_card
     && set.contains(collection, my_card)
     && !set.contains(collection, their_card)
-  case can_trade {
-    False -> {
-      collection
-      |> set.insert(their_card)
-      |> set.delete(my_card)
-      |> fn(s) { #(can_trade, s) }
-    }
-    True -> {
-      collection
-      |> set.insert(their_card)
-      |> set.delete(my_card)
-      |> fn(s) { #(can_trade, s) }
-    }
-  }
+  collection
+  |> set.insert(their_card)
+  |> set.delete(my_card)
+  |> fn(s) { #(can_trade, s) }
 }
 
 pub fn boring_cards(collections: List(Set(String))) -> List(String) {
