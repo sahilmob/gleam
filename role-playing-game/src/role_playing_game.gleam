@@ -28,8 +28,10 @@ pub fn cast_spell(player: Player, cost: Int) -> #(Player, Int) {
   case player.mana {
     Some(v) ->
       case int.compare(v, cost) {
-        order.Gt -> #(Player(..player, mana: Some(v - cost)), 2 * cost)
-        order.Eq -> #(Player(..player, mana: Some(v - cost)), 2 * cost)
+        order.Gt | order.Eq -> #(
+          Player(..player, mana: Some(v - cost)),
+          2 * cost,
+        )
         order.Lt -> #(player, 0)
       }
     None -> #(Player(..player, health: int.max(player.health - cost, 0)), 0)
